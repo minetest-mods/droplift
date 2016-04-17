@@ -5,11 +5,7 @@ Droplift lifts drops out of walkable nodes. ("drop" = "__builtin:item")
 This mod adds no in-world items or blocks, just additional physics.
 
 Droplift also prevents "entombed" drops from sinking below the floor
-when the game reloads, even if they are defined as non-liftable (see
-"Options" below). (If you don't know what I mean: In the default game,
-drop something on a glass block, put another block on top, reload,
-and the drop will fall below the top of the glass block.)
-
+when the game reloads.
 
 Goals:
 * Controlled item elevation through blocks, so it can be used reliably
