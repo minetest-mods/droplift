@@ -75,18 +75,12 @@ local function append_to_core_defns()
 	dropentity.is_entombed = false
 
 	-- Update drops when reloaded or spawned to maintain consistent behaviour.
-	local on_activate_copy = dropentity.on_activate
 	dropentity.on_activate = function(ent, staticdata, dtime_s)
-		local r = {on_activate_copy(ent, staticdata, dtime_s)}
 		wait_itemstring(ent,0)
-		return unpack(r)
 	end
 
 	-- Update drops inside newly placed (including fallen) nodes.
-	local add_node_copy = minetest.add_node
 	minetest.add_node = function(pos,node)
-		local r = {add_node_copy(pos, node)}
-
 		local a = minetest.get_objects_inside_radius(pos, 0.87)  -- Radius must include cube corners.
 		for _,obj in ipairs(a) do
 			local ent = obj:get_luaentity()
@@ -94,9 +88,8 @@ local function append_to_core_defns()
 				disentomb(obj)
 			end
 		end
-
-		return unpack(r)
 	end
+
 end
 
 
