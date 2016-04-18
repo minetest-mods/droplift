@@ -90,7 +90,7 @@ end
 -- * Entombment physics *
 
 
-local function disentomb(obj)
+local function disentomb(obj, reset)
 	local p = obj:getpos()
 	if p then
 
@@ -105,7 +105,7 @@ local function disentomb(obj)
 				obj:setpos(p2)
 			end
 			ent.is_entombed = in_walkable(p2)
-		elseif w and not quick_escape(ent,p) then
+		elseif w and not (reset and quick_escape(ent,p)) then
 			obj:setpos({x = p.x, y = brace, z = p.z})
 			ent.is_entombed = true
 		end
@@ -113,7 +113,7 @@ local function disentomb(obj)
 		if ent.is_entombed then
 			obj:setvelocity({x = 0, y = 0, z = 0})
 			obj:setacceleration({x = 0, y = 0, z = 0})
-			minetest.after(1.0, disentomb, obj)
+			minetest.after(1.0, disentomb, obj, false)
 		end
 
 	end
@@ -133,9 +133,7 @@ local function wait_itemstring(ent, c)
 		return
 	end
 
-	if ent.is_entombed then
-		disentomb(ent.object)
-	end
+	disentomb(ent.object, false)
 end
 
 
@@ -147,10 +145,10 @@ local function append_to_core_defns()
 	local on_activate_copy = dropentity.on_activate
 	dropentity.on_activate = function(ent, staticdata, dtime_s)
 		on_activate_copy(ent, staticdata, dtime_s)
-		if staticdata ~= "" then
-			ent.is_entombed = minetest.deserialize(staticdata).is_entombed
+		if staticdata ~= "" and minetest.deserialize(staticdata).is_entombed then
+			ent.is_entombed = true
+			minetest.after(0.1, wait_itemstring, ent, 1)
 		end
-		wait_itemstring(ent, 0)
 	end
 
 	-- Preserve state across reloads
@@ -176,7 +174,7 @@ local function append_to_core_defns()
 		for _,obj in ipairs(a) do
 			local ent = obj:get_luaentity()
 			if ent and ent.name == "__builtin:item" then
-				disentomb(obj)
+				disentomb(obj, true)
 			end
 		end
 	end
