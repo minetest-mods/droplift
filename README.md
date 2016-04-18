@@ -1,10 +1,10 @@
 
 ==== Droplift ====
 
-Droplift lifts drops out of walkable nodes. ("drop" = "__builtin:item")
+Droplift lifts drops out of solid blocks.
 This mod adds no in-world items or blocks, just additional physics.
 
-Droplift also prevents "entombed" drops from sinking below the floor
+Droplift also prevents buried drops from sinking below the floor
 when the game reloads.
 
 Goals:
