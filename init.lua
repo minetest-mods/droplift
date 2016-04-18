@@ -13,6 +13,7 @@ http://www.gnu.org/licenses/lgpl-2.1.html
 
 --]]
 
+droplift = {}
 
 local function in_walkable(p)
 	local n = minetest.get_node_or_nil(p)
@@ -119,6 +120,10 @@ local function disentomb(obj, reset)
 	end
 end
 
+function droplift.invoke(obj, entomb)
+	disentomb(obj, not entomb)
+end
+
 
 
 -- * Events *
@@ -137,7 +142,6 @@ local function wait_itemstring(ent, c)
 end
 
 
-
 local function append_to_core_defns()
 	local dropentity=minetest.registered_entities["__builtin:item"]
 
@@ -145,9 +149,13 @@ local function append_to_core_defns()
 	local on_activate_copy = dropentity.on_activate
 	dropentity.on_activate = function(ent, staticdata, dtime_s)
 		on_activate_copy(ent, staticdata, dtime_s)
-		if staticdata ~= "" and minetest.deserialize(staticdata).is_entombed then
-			ent.is_entombed = true
-			minetest.after(0.1, wait_itemstring, ent, 1)
+		if staticdata ~= "" then 
+			if minetest.deserialize(staticdata).is_entombed then
+				ent.is_entombed = true
+				minetest.after(0.1, wait_itemstring, ent, 1)
+			else
+				ent.object:setvelocity({x = 0, y = 0, z = 0})
+			end
 		end
 	end
 
