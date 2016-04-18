@@ -1,0 +1,43 @@
+Upon burial, drops may escape to one of the 26 surrounding nodes if any are non-obstructing ('walkable'==false).
+If the nearest player is within 8.5 nodes (by taxicab metric), spaces closer to that player are preferred, otherwise they are prioritised by +x, +y, +z.
+
+If no such spaces are found, the drop is "entombed," and remains subject to lift physics until free of obstructing nodes.
+Lift physics holds a drop for one second before moving it upwards by one node every step, and does not seek other escape routes.
+
+Droplift does not distinguish between differently shaped node boxes, only what their 'walkable' setting is.
+This makes it easy to manually entomb drops using common node types like slabs and glass panes.
+
+Entombed/free status is preserved across game reloads rather than retested.
+
+All drop velocities are zeroed on reload. This is to prevent buried drops from being sunk below their current floor.
+
+	-------
+	* API *
+	-------
+
+In general, drops are expected to spawn in non-obstructing nodes, like 'air.'
+Therefore droplift ignores newly spawned drops, and only checks them when they are newly buried.
+
+
+
+If you want droplift to handle drops spawned inside obstructing nodes, use:
+
+	droplift.invoke(dropObject, entomb)
+
+entomb = <boolean> Bypass initial escape phase and use only lift physics, otherwise follow normal burial behaviour.
+
+
+
+** Drops that are already being lifted should not be called again with invoke. **
+That would produce multiple unsyncronized handlers for the same object. It will speed things up, but it might also go wrong.
+
+
+
+...However,
+If you want to force an entombed drop to break free, AND you're sure it has an escape space, you can:
+
+	dropEntity.is_entombed = false
+	droplift.invoke(dropObject, false)
+
+If nothing weird happens, the handlers will be cleared from the newly freed drop.
+But if that's what you need, it may be preferable to refine the code accordingly.
