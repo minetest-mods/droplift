@@ -1,3 +1,6 @@
+Minetest mod: droplift
+
+                ** May 29 -- Major changes -- Update strongly recommended **
 
 ==== Droplift ====
 
@@ -6,6 +9,8 @@ This mod adds no in-world items or blocks, just additional physics.
 
 Droplift also prevents buried drops from sinking below the floor
 when the game reloads.
+
+A simple API allows it to cooperate with other mods.
 
 Goals:
 * Controlled item elevation through blocks, so it can be used reliably
