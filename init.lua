@@ -13,11 +13,11 @@ http://www.gnu.org/licenses/lgpl-2.1.html
 --]]
 --------------------------------------------------- Global
 
-droplift = {
+--[[droplift = {
 	invoke,
 	-- function (dropobj, sync)
 	-- sync in [ false | 0 | seconds ]. See details.txt
-}
+}]]
 
 --------------------------------------------------- Local
 
@@ -129,6 +129,10 @@ droplift.invoke = function(obj, sync)
 	async(obj, (sync and math.max(0,sync)))
 end
 
+droplift = { invoke }
+	-- function (dropobj, sync)
+	-- sync in [ false | 0 | seconds ]. See details.txt
+
 -- * Events *
 
 local function append_to_core_defns()
@@ -138,14 +142,14 @@ local function append_to_core_defns()
 	local on_activate_copy = dropentity.on_activate
 	dropentity.on_activate = function(ent, staticdata, dtime_s)
 		on_activate_copy(ent, staticdata, dtime_s)
-		if staticdata ~= "" then 
+		if staticdata ~= "" then
 			if minetest.deserialize(staticdata).is_entombed then
 				ent.is_entombed = true
 				ent.object:setacceleration({x = 0, y = 0, z = 0})  -- Prevents 0.18m reload slippage. Not critical.
 				minetest.after(0.1, lift, ent.object)
 			end
 		end
-		ent.object:setvelocity({x = 0, y = 0, z = 0})  -- Prevents resting-buried drops burrowing. 
+		ent.object:setvelocity({x = 0, y = 0, z = 0})  -- Prevents resting-buried drops burrowing.
 	end
 
 	-- Preserve state across reloads
