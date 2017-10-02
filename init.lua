@@ -12,12 +12,13 @@ http://www.gnu.org/licenses/lgpl-2.1.html
 
 --]]
 --------------------------------------------------- Global
+invoke = nil
 
---[[droplift = {
+droplift = {
 	invoke,
 	-- function (dropobj, sync)
 	-- sync in [ false | 0 | seconds ]. See details.txt
-}]]
+}
 
 --------------------------------------------------- Local
 
@@ -128,10 +129,6 @@ end
 droplift.invoke = function(obj, sync)
 	async(obj, (sync and math.max(0,sync)))
 end
-
-droplift = { invoke }
-	-- function (dropobj, sync)
-	-- sync in [ false | 0 | seconds ]. See details.txt
 
 -- * Events *
 
