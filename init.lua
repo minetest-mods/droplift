@@ -12,14 +12,7 @@ http://www.gnu.org/licenses/lgpl-2.1.html
 
 --]]
 --------------------------------------------------- Global
-invoke = nil
-
-droplift = {
-	invoke,
-	-- function (dropobj, sync)
-	-- sync in [ false | 0 | seconds ]. See details.txt
-}
-
+droplift = {}
 --------------------------------------------------- Local
 
 local function obstructed(p)
